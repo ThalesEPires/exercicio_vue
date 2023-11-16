@@ -4,46 +4,50 @@ import { reactive } from 'vue';
   const estado = reactive({
     resultado: 0,
     valor1: 0,
-    valor2: 0
-  })
+    valor2: 0,
+    operacao: '+'
+  });
 
-  function somar() {
-    const { valor1, valor2, resultado } = estado;
-    return resultado = valor1 + valor2;
-  }
+  function calcular() {
+    const { valor1, valor2, operacao } = estado;
 
-  function subtrair() {
-    const { valor1, valor2, resultado } = estado;
-    return resultado = valor1 - valor2;
-  }
-
-  function multiplicar() {
-    const { valor1, valor2, resultado } = estado;
-    return resultado = valor1 * valor2;
-  }
-
-  function dividir() {
-    const { valor1, valor2, resultado } = estado;
-    return resultado = valor1 / valor2;
+    switch (operacao) {
+      case '+':
+        estado.resultado = valor1 + valor2;
+        break;
+      case '-':
+        estado.resultado = valor1 - valor2;
+        break;
+      case '*':
+        estado.resultado = valor1 * valor2;
+        break;
+      case '/':
+        estado.resultado = valor1 / valor2;
+        break;
+      default:
+        estado.resultado = 0;
+    }
   }
 </script>
 
 <template>
   <div class="container" >
-      <input type="number" id="campo1" @keyup="evento => estado.valor1 = evento.target.value" placeholder="Valor1" required>
-      <select class="operacao">
-        <option @click="somar">+</option>
-        <option @click="subtrair">-</option>
-        <option @click="multiplicar">*</option>
-        <option @click="dividir">/</option>
+      <input type="number" id="campo1" v-model="estado.valor1" @keyup="calcular" placeholder="Primeiro valor" required>
+      <select class="operacao" v-model="estado.operacao" @change="calcular">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
       </select>
-      <input type="number" id="campo2" @keyup="evento => estado.valor2 = evento.target.value" placeholder="Valor2" required>
+      <input type="number" id="campo2" v-model="estado.valor2" @keyup="calcular" placeholder="Segundo valor" required>
       <label class="resultado" for="resultado"> = {{ estado.resultado }}</label>
   </div>
 </template>
 
 <style scoped>
   .container {
+    background-color: #ccc;
+    padding: 12px;
     display: flex;
     margin-top: 16px;
     margin-left: 16px;
